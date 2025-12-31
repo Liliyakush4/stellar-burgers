@@ -1,17 +1,17 @@
+// компонент карточки заказа
 import { FC, memo, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-
 import { OrderCardProps } from './type';
 import { TIngredient } from '@utils-types';
 import { OrderCardUI } from '../ui/order-card';
+import { useSelector } from '../../services/store';
 
 const maxIngredients = 6;
 
 export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const location = useLocation();
 
-  /** TODO: взять переменную из стора */
-  const ingredients: TIngredient[] = [];
+  const { ingredients } = useSelector((state) => state.ingredients);
 
   const orderInfo = useMemo(() => {
     if (!ingredients.length) return null;
@@ -35,23 +35,24 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
         : 0;
 
     const date = new Date(order.createdAt);
-    return {
-      ...order,
-      ingredientsInfo,
-      ingredientsToShow,
-      remains,
-      total,
-      date
-    };
-  }, [order, ingredients]);
 
-  if (!orderInfo) return null;
+    return {
+      ...order, // все поля исходного заказа
+      ingredientsInfo, // массив полных объектов ингредиентов
+      ingredientsToShow, // ингредиенты для отображения (до 6 шт)
+      remains, // сколько ингредиентов не показано
+      total, // общая стоимость
+      date // объект Date для форматирования
+    };
+  }, [order, ingredients]); // Зависимости: заказ и массив ингридиентов
+
+  if (!orderInfo) return null; // если данных нет - ничего не рендерим
 
   return (
     <OrderCardUI
-      orderInfo={orderInfo}
-      maxIngredients={maxIngredients}
-      locationState={{ background: location }}
+      orderInfo={orderInfo} // все вычисленные данные
+      maxIngredients={maxIngredients} // лимит ингредиентов
+      locationState={{ background: location }} // для модального окна
     />
   );
 });

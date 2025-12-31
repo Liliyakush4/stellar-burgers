@@ -1,22 +1,29 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
-
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
+import { useSelector } from '../../services/store';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
-  const buns = [];
-  const mains = [];
-  const sauces = [];
+  const { ingredients } = useSelector((state) => state.ingredients);
 
-  const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
+  const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
+  const mains = ingredients.filter((ingredient) => ingredient.type === 'main');
+  const sauces = ingredients.filter(
+    (ingredient) => ingredient.type === 'sauce'
+  );
+
+  // хранит текущую активную вкладку
+  const [currentTab, setCurrentTab] = useState<TTabMode>('bun'); // инициализируется значением 'bun'
+
+  // ссылки на DOM-элементы заголовков разделов для программной прокрутки к нужному разделу
   const titleBunRef = useRef<HTMLHeadingElement>(null);
   const titleMainRef = useRef<HTMLHeadingElement>(null);
   const titleSaucesRef = useRef<HTMLHeadingElement>(null);
 
+  // отслеживание видимости разделов
   const [bunsRef, inViewBuns] = useInView({
-    threshold: 0
+    threshold: 0 // инициулизируются как не видимые
   });
 
   const [mainsRef, inViewFilling] = useInView({
@@ -27,6 +34,7 @@ export const BurgerIngredients: FC = () => {
     threshold: 0
   });
 
+  // автоматическое переключение вкладок при скролле
   useEffect(() => {
     if (inViewBuns) {
       setCurrentTab('bun');
@@ -35,7 +43,7 @@ export const BurgerIngredients: FC = () => {
     } else if (inViewFilling) {
       setCurrentTab('main');
     }
-  }, [inViewBuns, inViewFilling, inViewSauces]);
+  }, [inViewBuns, inViewFilling, inViewSauces]); // сработает при изменении видимости любого из разделов
 
   const onTabClick = (tab: string) => {
     setCurrentTab(tab as TTabMode);
@@ -47,8 +55,7 @@ export const BurgerIngredients: FC = () => {
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  return null;
-
+  // передает все данные и функции в виде пропсов в презентационный компонент для разделения логики и представления
   return (
     <BurgerIngredientsUI
       currentTab={currentTab}

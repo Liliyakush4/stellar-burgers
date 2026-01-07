@@ -83,10 +83,14 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/',
   },
   devServer: {
-    static: path.join(__dirname, './dist'),
+    static: {
+      directory: path.resolve(__dirname, './dist'),
+      publicPath: '/',
+    },
     compress: true,
     historyApiFallback: true,
     port: 4000

@@ -50,7 +50,7 @@ export const loginUser = createAsyncThunk(
   'user/login',
   async (data: TLoginData) => {
     const response = await loginUserApi(data);
-    setCookie('accessToken', response.accessToken.split('Bearer ')[1]);
+    setCookie('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
     return response.user;
   }
@@ -90,7 +90,6 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // checkUserAuth
       .addCase(checkUserAuth.pending, (state) => {
         state.isLoading = true;
       })
@@ -104,7 +103,6 @@ const userSlice = createSlice({
         state.error = action.error.message || 'Ошибка проверки авторизации';
         state.isAuthChecked = true;
       })
-      // loginUser
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -117,7 +115,6 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка авторизации';
       })
-      // registerUser
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -130,11 +127,9 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка регистрации';
       })
-      // logoutUser
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
       })
-      // updateUser
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;

@@ -16,7 +16,6 @@ const initialState: OrderState = {
   errorMessage: null
 };
 
-// экшен принимает массив ингридиентов, которые пользователь добавил в конструктор бургера
 export const createOrder = createAsyncThunk(
   'order/create',
   async (ingredients: string[], { rejectWithValue }) => {

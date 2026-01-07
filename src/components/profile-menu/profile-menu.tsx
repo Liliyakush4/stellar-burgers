@@ -5,7 +5,7 @@ import { useDispatch } from '../../services/store';
 import { logoutUser } from '../../services/slices/userSlice';
 
 export const ProfileMenu: FC = () => {
-  const { pathname } = useLocation(); // получаем текущий путь
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -13,7 +13,7 @@ export const ProfileMenu: FC = () => {
     dispatch(logoutUser())
       .unwrap()
       .then(() => {
-        navigate('/login');
+        navigate('/login', { replace: true });
       });
   };
 

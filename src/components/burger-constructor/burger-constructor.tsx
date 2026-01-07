@@ -4,19 +4,16 @@ import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import { createOrder, clearOrder } from '../../services/slices/orderSlice';
 import { clearConstructor } from '../../services/slices/burgerConstructorSlice';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const { bun, ingredients } = useSelector(
-    (state) => state.burgerConstructor // получение данных конструктора из store (выбранной булки и массива ингредиентов)
-  );
-  const { order, isLoading } = useSelector(
-    (state) => state.order // получение данных созданного заказа
-  );
-  const { user } = useSelector((state) => state.user); // получение данных пользователя для проверки авторизации
+  const { bun, ingredients } = useSelector((state) => state.burgerConstructor);
+  const { order, isLoading } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
 
   const onOrderClick = () => {
     if (!user) {
@@ -32,10 +29,18 @@ export const BurgerConstructor: FC = () => {
       bun._id
     ];
 
-    dispatch(createOrder(orderIngredients)) // диспатч заказа с id всех ингредиентов
-      .unwrap() // для работы с промисом асинхронного экшена
-      .then(() => {
-        dispatch(clearConstructor()); // при успехе очищает конструктор
+    dispatch(createOrder(orderIngredients))
+      .unwrap()
+      .then((createOrder) => {
+        const orderNumber = createOrder.number;
+
+        dispatch(clearConstructor());
+
+        if (orderNumber) {
+          navigate(`/order/${orderNumber}`, {
+            state: { background: location }
+          });
+        }
       })
       .catch((error) => {
         console.error('Ошибка создания заказа:', error);

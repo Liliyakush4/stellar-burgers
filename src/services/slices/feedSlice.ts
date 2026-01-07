@@ -1,4 +1,3 @@
-// слайс для ленты заказов
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { TOrder, TOrdersData } from '@utils-types';
 import { getFeedsApi } from '@api';

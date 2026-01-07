@@ -16,6 +16,8 @@
   color: #8585ad;
   background-color: unset;
   border: none;
+  text-align: left;
+  align-self: flex-start;
 }
 
 .button:hover {

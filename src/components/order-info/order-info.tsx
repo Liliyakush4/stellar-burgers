@@ -1,5 +1,5 @@
 import { FC, useMemo, useState, useEffect } from 'react';
-import { Preloader } from '../ui/preloader';
+import { Preloader } from '@ui';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient, TOrder } from '@utils-types';
 import { useSelector } from '../../services/store';

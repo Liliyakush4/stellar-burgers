@@ -13,8 +13,7 @@ export const BurgerIngredients: FC = () => {
     (ingredient) => ingredient.type === 'sauce'
   );
 
-  // хранит текущую активную вкладку
-  const [currentTab, setCurrentTab] = useState<TTabMode>('bun'); // инициализируется значением 'bun'
+  const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
 
   // ссылки на DOM-элементы заголовков разделов для программной прокрутки к нужному разделу
   const titleBunRef = useRef<HTMLHeadingElement>(null);
@@ -55,7 +54,6 @@ export const BurgerIngredients: FC = () => {
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // передает все данные и функции в виде пропсов в презентационный компонент для разделения логики и представления
   return (
     <BurgerIngredientsUI
       currentTab={currentTab}

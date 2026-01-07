@@ -14,9 +14,19 @@ export const ProfileOrders: FC = () => {
   const orders = useSelector(selectUserOrders);
   const isLoading = useSelector(selectUserOrdersLoading);
   const hasError = useSelector(selectUserOrdersError);
+
+  const { user, isAuthChecked } = useSelector((s) => s.user);
+
   useEffect(() => {
+    if (!isAuthChecked) return;
+    if (!user) return;
+
     dispatch(fetchUserOrders());
-  }, [dispatch]);
+  }, [dispatch, isAuthChecked, user]);
+
+  if (!isAuthChecked) return <Preloader />;
+
+  if (!user) return null;
 
   if (isLoading) {
     return <Preloader />;

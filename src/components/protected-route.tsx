@@ -15,12 +15,12 @@ export const ProtectedRoute: FC<ProtectedRouteProps> = ({
   const location = useLocation();
 
   if (!isAuthChecked) {
-    return <div>Загрузка...</div>;
+    return null;
   }
 
   if (onlyUnAuth && user) {
-    const { from } = location.state || { from: { pathname: '/' } };
-    return <Navigate to={from} />;
+    const from = (location.state as any)?.from?.pathname || '/';
+    return <Navigate to={from} replace />;
   }
 
   if (!onlyUnAuth && !user) {

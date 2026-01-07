@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
 import { TIngredient, TConstructorIngredient } from '@utils-types';
 
 interface BurgerConstructorState {
@@ -26,7 +26,7 @@ const burgerConstructorSlice = createSlice({
       },
       prepare: (ingredient: TIngredient) => {
         // функция, которая преобразует данные перед передачей в reducer
-        const id = crypto.randomUUID();
+        const id = nanoid();
         return { payload: { ...ingredient, id } };
       }
     },
@@ -40,6 +40,15 @@ const burgerConstructorSlice = createSlice({
       action: PayloadAction<{ dragIndex: number; hoverIndex: number }>
     ) => {
       const { dragIndex, hoverIndex } = action.payload;
+      if (
+        dragIndex < 0 ||
+        hoverIndex < 0 ||
+        dragIndex >= state.ingredients.length ||
+        hoverIndex >= state.ingredients.length ||
+        dragIndex === hoverIndex
+      ) {
+        return;
+      }
       const dragIngredient = state.ingredients[dragIndex];
       state.ingredients.splice(dragIndex, 1);
       state.ingredients.splice(hoverIndex, 0, dragIngredient);

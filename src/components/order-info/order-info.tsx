@@ -10,7 +10,11 @@ export const OrderInfo: FC = () => {
   const { number } = useParams<{ number: string }>();
   const [orderData, setOrderData] = useState<TOrder | null>(null);
   const [loading, setLoading] = useState(true);
-  const { ingredients } = useSelector((state) => state.ingredients);
+  const {
+    ingredients,
+    isLoading: ingredientsLoading,
+    hasError: ingredientsError
+  } = useSelector((state) => state.ingredients);
 
   useEffect(() => {
     if (!number) {
@@ -18,20 +22,29 @@ export const OrderInfo: FC = () => {
       return;
     }
 
-    getOrderByNumberApi(parseInt(number))
+    const orderNumber = Number(number);
+    if (Number.isNaN(orderNumber)) {
+      setOrderData(null);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    getOrderByNumberApi(Number(number))
       .then((res) => {
         if (res.success && res.orders.length > 0) {
           setOrderData(res.orders[0]);
+        } else {
+          setOrderData(null);
         }
       })
-      .catch(() => {
-        console.error('Ошибка загрузки заказа');
-      })
+      .catch(() => setOrderData(null))
       .finally(() => setLoading(false));
   }, [number]);
 
   const orderInfo = useMemo(() => {
-    if (!orderData || !ingredients.length) return null;
+    if (!orderData) return null;
+    if (!ingredients.length) return null;
 
     const date = new Date(orderData.createdAt);
 
@@ -39,24 +52,19 @@ export const OrderInfo: FC = () => {
       [key: string]: TIngredient & { count: number };
     };
 
-    const ingredientsInfo = orderData.ingredients.reduce(
-      (acc: TIngredientsWithCount, item) => {
+    const orderIngredients = orderData.ingredients ?? [];
+    const ingredientsInfo: TIngredientsWithCount = orderIngredients.reduce(
+      (acc, item) => {
         const ingredient = ingredients.find((ing) => ing._id === item);
+        if (!ingredient) return acc;
 
-        if (ingredient) {
-          if (!acc[item]) {
-            acc[item] = {
-              ...ingredient,
-              count: 1
-            };
-          } else {
-            acc[item].count++;
-          }
-        }
+        acc[item] = acc[item]
+          ? { ...acc[item], count: acc[item].count + 1 }
+          : { ...ingredient, count: 1 };
 
         return acc;
       },
-      {}
+      {} as TIngredientsWithCount
     );
 
     const total = Object.values(ingredientsInfo).reduce(
@@ -72,7 +80,18 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (loading) {
+  if (loading || ingredientsLoading) {
+    return <Preloader />;
+  }
+
+  if (!ingredients.length) {
+    if (ingredientsError) {
+      return (
+        <div className='text text_type_main-default'>
+          Ошибка загрузки ингредиентов
+        </div>
+      );
+    }
     return <Preloader />;
   }
 

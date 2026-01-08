@@ -35,3 +35,11 @@
   align-items: center;
   margin: 0 auto;
 }
+
+.text_active {
+  color: var(--text-primary-color);
+}
+
+.text_inactive {
+  color: var(--text-inactive-color);
+}

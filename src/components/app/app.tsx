@@ -51,7 +51,7 @@ const App: FC = () => {
 
   const handleModalClose = () => navigate(-1);
 
-  const isAppLoading = isLoading || !isAuthChecked;
+  const isAppLoading = isLoading;
 
   const page = (node: React.ReactNode) => (
     <div className={styles.pageCenter}>{node}</div>
@@ -155,7 +155,6 @@ const App: FC = () => {
             <Route path='*' element={<NotFound404 />} />
           </Routes>
 
-          {/* Модальные окна */}
           {background && (
             <Routes>
               <Route

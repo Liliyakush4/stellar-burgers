@@ -5,12 +5,11 @@ import { IngredientsCategoryUI } from '../ui/ingredients-category';
 import { useSelector } from '../../services/store';
 
 export const IngredientsCategory = forwardRef<
-  // передаем пропсы через компонент (для отслеживания видимости секции)
   HTMLUListElement,
   TIngredientsCategoryProps
 >(({ title, titleRef, ingredients }, ref) => {
   const { bun, ingredients: constructorIngredients } = useSelector(
-    (state) => state.burgerConstructor // получаем текущий конструктор бургера
+    (state) => state.burgerConstructor
   );
 
   const ingredientsCounters = useMemo(() => {

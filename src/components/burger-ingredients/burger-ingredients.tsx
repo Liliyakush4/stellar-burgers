@@ -15,14 +15,12 @@ export const BurgerIngredients: FC = () => {
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
 
-  // ссылки на DOM-элементы заголовков разделов для программной прокрутки к нужному разделу
   const titleBunRef = useRef<HTMLHeadingElement>(null);
   const titleMainRef = useRef<HTMLHeadingElement>(null);
   const titleSaucesRef = useRef<HTMLHeadingElement>(null);
 
-  // отслеживание видимости разделов
   const [bunsRef, inViewBuns] = useInView({
-    threshold: 0 // инициулизируются как не видимые
+    threshold: 0
   });
 
   const [mainsRef, inViewFilling] = useInView({
@@ -33,7 +31,6 @@ export const BurgerIngredients: FC = () => {
     threshold: 0
   });
 
-  // автоматическое переключение вкладок при скролле
   useEffect(() => {
     if (inViewBuns) {
       setCurrentTab('bun');
@@ -42,7 +39,7 @@ export const BurgerIngredients: FC = () => {
     } else if (inViewFilling) {
       setCurrentTab('main');
     }
-  }, [inViewBuns, inViewFilling, inViewSauces]); // сработает при изменении видимости любого из разделов
+  }, [inViewBuns, inViewFilling, inViewSauces]);
 
   const onTabClick = (tab: string) => {
     setCurrentTab(tab as TTabMode);

@@ -17,7 +17,6 @@ const burgerConstructorSlice = createSlice({
   reducers: {
     addIngredient: {
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
-        // функция, которая изменяет состояние
         if (action.payload.type === 'bun') {
           state.bun = action.payload;
         } else {
@@ -25,7 +24,6 @@ const burgerConstructorSlice = createSlice({
         }
       },
       prepare: (ingredient: TIngredient) => {
-        // функция, которая преобразует данные перед передачей в reducer
         const id = nanoid();
         return { payload: { ...ingredient, id } };
       }

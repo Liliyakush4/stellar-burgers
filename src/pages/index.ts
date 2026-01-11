@@ -1,5 +1,6 @@
 export * from './constructor-page';
 export * from './feed';
+export * from './order-details';
 export * from './forgot-password';
 export * from './login';
 export * from './not-fount-404';

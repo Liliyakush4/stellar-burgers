@@ -5,3 +5,27 @@
 .form {
   max-width: 480px;
 }
+
+.main {
+  display: flex;
+  align-items: flex-start;
+  width: 1240px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+.menuWrap {
+  width: 320px;
+  flex: 0 0 320px;
+  margin-top: 120px;
+  margin-right: 60px;
+}
+
+.content {
+  flex: 0 0 480px;
+  margin-top: 120px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

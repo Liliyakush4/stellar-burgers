@@ -1,14 +1,36 @@
 import { FC } from 'react';
-import { Preloader } from '../ui/preloader';
+import { Preloader } from '@ui';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
+import { useSelector } from '../../services/store';
+import { useLocation, useParams } from 'react-router-dom';
+import styles from './ingredient-details.module.css';
 
 export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
-  const ingredientData = null;
+  const location = useLocation();
+  const isPage = !location.state?.background;
 
-  if (!ingredientData) {
+  const { id } = useParams<{ id: string }>();
+  const { ingredients, isLoading } = useSelector((state) => state.ingredients);
+
+  const ingredientData = ingredients.find((ing) => ing._id === id);
+
+  if (isLoading) {
     return <Preloader />;
   }
 
-  return <IngredientDetailsUI ingredientData={ingredientData} />;
+  if (!ingredientData) {
+    return <div>Ингредиент не найден</div>;
+  }
+
+  return (
+    <div className={styles.page}>
+      {isPage && (
+        <h1 className={`text text_type_main-large ${styles.title}`}>
+          Детали ингредиента
+        </h1>
+      )}
+
+      <IngredientDetailsUI ingredientData={ingredientData} />
+    </div>
+  );
 };

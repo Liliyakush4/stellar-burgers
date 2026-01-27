@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "name": "Тестовый заказ",
+  "order": {
+    "_id": "order-id",
+    "status": "done",
+    "name": "Тестовый заказ",
+    "createdAt": "2024-03-20T12:00:00.000Z",
+    "updatedAt": "2024-03-20T12:00:00.000Z",
+    "number": 12345,
+    "ingredients": ["bun-id", "main-id", "bun-id"]
+  }
+}
